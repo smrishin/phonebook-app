@@ -14,6 +14,7 @@ data efficiently.
 - Real-time validation
 - Error handling
 - Edit history tracking
+- Share local development environment (via localtunnel)
 
 ## Tech Stack
 
@@ -91,7 +92,7 @@ DYNAMODB_LOCAL_URL=http://localhost:8000
 For the frontend (`web/.env.local`):
 
 ```
-NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:3000
 
 # Environment
 NODE_ENV=development
@@ -150,6 +151,27 @@ npm run dev
 ```
 
 #### 3. Open your browser and navigate to `http://localhost:3000`
+
+## Sharing Your Local Development Environment
+
+To share your local development environment with others (e.g., for testing or collaboration), you can use localtunnel to expose your application to the internet:
+
+1. Start your backend and frontend servers as described above
+2. In a new terminal, run:
+
+```bash
+npm run create-tunnels
+```
+
+This will:
+
+- Create a public URL for your frontend (port 3000)
+- Create a public URL for your backend (port 5000)
+- Automatically update your frontend's environment variables to use the tunneled backend URL
+
+The script will display the public URLs that you can share with others. They will be able to access your application through these URLs.
+
+Note: The tunnel URLs are temporary and will change each time you run the script. Make sure to update the shared URLs when you restart the tunnels.
 
 ## Contributing
 
