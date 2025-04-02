@@ -3,7 +3,7 @@ import time
 from app.services import add_user, get_user, create_contact, get_contacts, update_contact, delete_contact, get_contact
 from app.config import Config
 from app.sse import sse_contact_updates
-from app.socket import send_realtime_update
+# from app.socket import send_realtime_update
 from app.auth import token_required
 
 routes = Blueprint("routes", __name__)

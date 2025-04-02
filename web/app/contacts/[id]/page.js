@@ -254,6 +254,16 @@ export default function ContactDetailPage({ params }) {
           }
         }));
 
+        setEditedContact((prevContact) => ({
+          ...data,
+          contact_id: prevContact.contact_id,
+          user_id: prevContact.user_id,
+          edit_history: {
+            ...prevContact.edit_history,
+            [currentTime]: changes
+          }
+        }));
+
         setIsEditing(false);
         setError(null);
       } catch (err) {
