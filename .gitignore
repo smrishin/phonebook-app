@@ -35,6 +35,7 @@ coverage/
 *.bak
 *.tmp
 *.temp
+*.pem
 
 
 # dependencies

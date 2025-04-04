@@ -19,9 +19,9 @@ if USE_LOCAL:
 else:
     dynamodb = boto3.resource(
         "dynamodb",
-        region_name="us-east-1",  # Change to your AWS region
-        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
+        # region_name="us-east-1",  # Change to your AWS region
+        # aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        # aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
     )
 
 def create_users_table():
@@ -49,11 +49,10 @@ def create_users_table():
                 "KeySchema": [
                     {"AttributeName": "email", "KeyType": "HASH"}
                 ],
-                "Projection": {"ProjectionType": "ALL"},
-                "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}
+                "Projection": {"ProjectionType": "ALL"}
             }
         ],
-        ProvisionedThroughput={"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}
+        BillingMode="PAY_PER_REQUEST"
     )
 
     table.wait_until_exists()
@@ -87,11 +86,10 @@ def create_contacts_table():
                     {"AttributeName": "user_id", "KeyType": "HASH"},
                     {"AttributeName": "email", "KeyType": "RANGE"}
                 ],
-                "Projection": {"ProjectionType": "ALL"},
-                "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}
+                "Projection": {"ProjectionType": "ALL"}
             }
         ],
-        ProvisionedThroughput={"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}
+        BillingMode="PAY_PER_REQUEST"
     )
 
     table.wait_until_exists()

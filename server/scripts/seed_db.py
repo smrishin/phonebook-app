@@ -2,7 +2,6 @@ import boto3
 import os
 import time
 import uuid
-from app.models import get_users_table, get_contacts_table
 
 # Configuration: Use local or AWS DynamoDB
 USE_LOCAL = os.getenv("USE_LOCAL", "true").lower() == "true"
@@ -18,10 +17,16 @@ if USE_LOCAL:
 else:
     dynamodb = boto3.resource(
         "dynamodb",
-        region_name="us-east-1",  # Change to your AWS region
-        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
+        # region_name="us-east-1",  # Change to your AWS region
+        # aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
+        # aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY")
     )
+
+def get_contacts_table():
+    return dynamodb.Table("phonebook-contacts")
+
+def get_users_table():
+    return dynamodb.Table("phonebook-users")
 
 def generate_unique_id(table, key_name, user_id=None, max_attempts=3):
     for _ in range(max_attempts):
