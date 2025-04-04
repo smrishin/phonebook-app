@@ -127,7 +127,7 @@ export default function ContactsPage() {
       </div>
 
       {/* Contacts list */}
-      <div className="flex-1 pr-16">
+      <div className="flex-1 pl-16 pr-28">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Contacts</h1>
           <Link
@@ -153,7 +153,7 @@ export default function ContactsPage() {
         <div className="grid gap-4">
           {alphabet.map((letter) => (
             <div key={letter} id={`section-${letter}`} className="pt-4">
-              <div className="text-lg font-bold text-white/80 mb-2 sticky top-4 backdrop-blur-sm py-2 z-10">
+              <div className="text-lg font-bold text-white/80 mb-2 sticky top-4 py-2 z-10">
                 {letter}
               </div>
               {contactsByLetter[letter].map((contact) => (
