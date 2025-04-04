@@ -5,9 +5,10 @@ load_dotenv()
 
 class Config:
     USE_LOCAL = os.getenv("USE_LOCAL", "true").lower() == "true"
+    REALTIME_MODE = "websockets"
 
     if USE_LOCAL:
-        REALTIME_MODE = "websockets"
+        # REALTIME_MODE = "websockets"
         DYNAMODB_CONFIG = {
             "region_name": "us-east-1",
             "endpoint_url": os.getenv("DYNAMODB_LOCAL_URL", "http://localhost:8000"),
@@ -16,7 +17,7 @@ class Config:
         }
     else:
         # AWS Lambda - not using this for now
-        REALTIME_MODE = "sse" # Server-Sent Events
+        # REALTIME_MODE = "sse" # Server-Sent Events
         DYNAMODB_CONFIG = {
             "region_name": os.getenv("AWS_REGION", "us-east-1"),
             "aws_access_key_id": os.getenv("AWS_ACCESS_KEY_ID"),
