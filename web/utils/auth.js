@@ -1,6 +1,6 @@
 "use client";
 
-import api from "./api";
+import api, { useLoadingStore } from "./api";
 
 function parseJwt(token) {
   try {
@@ -52,8 +52,12 @@ export const login = async (email) => {
 };
 
 export const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+  useLoadingStore.getState().setIsLoading(true);
+  setTimeout(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    useLoadingStore.getState().setIsLoading(false);
+  }, 1000);
 };
 
 export const getToken = () => {

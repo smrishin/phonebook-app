@@ -357,7 +357,7 @@ export default function ContactDetailPage({ params }) {
         </div>
 
         {!showEditHistory ? (
-          <div className="bg-gray-500 shadow rounded-lg p-6">
+          <div className="bg-[#817d7d] shadow rounded-lg p-6">
             {isEditing ? (
               <EditForm
                 contact={editedContact}
