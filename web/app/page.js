@@ -23,6 +23,9 @@ export default function LoginPage() {
       setAuth(true);
       router.push("/contacts");
     } catch (err) {
+      if (err.status === 404) {
+        err.message = "User not found. Please reach out to the admin.";
+      }
       setError(err.message || "Login failed. Please try again.");
     }
   };
