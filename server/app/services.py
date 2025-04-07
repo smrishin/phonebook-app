@@ -206,18 +206,38 @@ def update_contact(user_id, contact_id, data):
                 return jsonify({"error": "Email already exists"}), 400
 
         edit_history = {}
+        updateExpressionArray = []
+        expressionAttributeNames = {}
+        expressionAttributeValues = {}
         for field in ["first_name", "last_name", "phone", "email"]:
-            if field in data:
+            if field in data and data[field] != contact[field]:
                 contact[field] = data[field]
                 edit_history[field] = data[field]
+                updateExpressionArray.append(f" #{field} = :{field}")
+                expressionAttributeNames[f"#{field}"] = field
+                expressionAttributeValues[f":{field}"] = data[field]
 
-        current_time = str(int(time.time()))
-        contact.setdefault("edit_history", {})[current_time] = edit_history
+        if edit_history: 
+            '''
+            Make db update only if there are changes to the contact
+            '''
+            current_time = str(int(time.time()))
+            contact.setdefault("edit_history", {})[current_time] = edit_history
+            expressionAttributeNames["#edit_history"] = "edit_history"
+            expressionAttributeValues[":edit_history"] = contact["edit_history"]
+            updateExpression = "set #edit_history = :edit_history, " + ", ".join(updateExpressionArray)
 
-        table.put_item(Item=contact)
-        print(f"contact updated - id: {contact_id}, email: {contact['email']}")
-        
-        send_realtime_update({**contact, "action": "update"})
+            table.update_item(
+                Key={"user_id": user_id, "contact_id": contact_id},
+                UpdateExpression=updateExpression,
+                ExpressionAttributeNames=expressionAttributeNames,
+                ExpressionAttributeValues=expressionAttributeValues
+            )
+            print(f"contact updated - id: {contact_id}, email: {contact['email']}")
+            
+            send_realtime_update({**contact, "action": "update"})
+        else:
+            print(f"no changes to contact - id: {contact_id}, email: {contact['email']}")
         
         return jsonify(contact), 200
     except Exception as e:

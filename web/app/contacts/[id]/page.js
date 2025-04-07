@@ -39,7 +39,7 @@ const EditForm = memo(({ contact, onSubmit, onCancel, error }) => {
             onChange: () => clearErrors("root")
           })}
           type="text"
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+          className={`w-full cursor-text px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
             errors.first_name ? "border-red-500" : ""
           }`}
         />
@@ -158,7 +158,7 @@ export default function ContactDetailPage({ params }) {
   }, [id, router]);
 
   useEffect(() => {
-    if (!contact || isEditing) return;
+    if (!contact) return;
 
     const handleContactUpdate = (updatedContact) => {
       if (
@@ -172,10 +172,12 @@ export default function ContactDetailPage({ params }) {
             ...prev,
             ...updatedContact
           }));
-          setEditedContact((prev) => ({
-            ...prev,
-            ...updatedContact
-          }));
+          if (!isEditing) {
+            setEditedContact((prev) => ({
+              ...prev,
+              ...updatedContact
+            }));
+          }
         }
       }
     };
@@ -222,7 +224,22 @@ export default function ContactDetailPage({ params }) {
 
   const handleSubmit = useCallback(
     async (data) => {
+      const checkContactOverwrite = (editedContact, contact) => {
+        const fields = ["first_name", "last_name", "phone", "email"];
+        return fields.some((field) => editedContact[field] !== contact[field]);
+      };
+
       try {
+        if (checkContactOverwrite(editedContact, contact)) {
+          if (
+            !window.confirm(
+              "Contact has been updated by another user. Do you want overwrite the changes?"
+            )
+          ) {
+            return;
+          }
+        }
+
         const user = getUser();
         if (!user) {
           router.push("/");
@@ -234,15 +251,30 @@ export default function ContactDetailPage({ params }) {
           return;
         }
 
+        const changes = {
+          ...(data.first_name !== contact.first_name && {
+            first_name: data.first_name
+          }),
+          ...(data.last_name !== contact.last_name && {
+            last_name: data.last_name
+          }),
+          ...(data.phone !== contact.phone && {
+            phone: data.phone
+          }),
+          ...(data.email !== contact.email && {
+            email: data.email
+          })
+        };
+
+        if (Object.keys(changes).length <= 0) {
+          setIsEditing(false);
+          setError(null);
+          return;
+        }
+
         await api.put(`/contacts/${user.user_id}/${id}`, data);
 
         const currentTime = Date.now() / 1000;
-        const changes = {
-          first_name: data.first_name,
-          last_name: data.last_name,
-          phone: data.phone,
-          email: data.email
-        };
 
         setContact((prevContact) => ({
           ...data,
@@ -357,7 +389,7 @@ export default function ContactDetailPage({ params }) {
         </div>
 
         {!showEditHistory ? (
-          <div className="bg-[#817d7d] shadow rounded-lg p-6">
+          <div className="bg-[#a4a0a0] shadow rounded-lg p-6">
             {isEditing ? (
               <EditForm
                 contact={editedContact}
