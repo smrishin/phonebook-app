@@ -95,7 +95,7 @@ export default function Header() {
           {auth && (
             <button
               onClick={handleLogout}
-              className="bg-blue-500 hover:bg-blue-600 px-10 py-2 rounded text-sm transition-colors"
+              className="bg-blue-500 hover:bg-blue-600 px-2 md:px-10 py-2 rounded text-sm transition-colors"
             >
               Logout
             </button>

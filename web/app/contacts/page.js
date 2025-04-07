@@ -146,7 +146,7 @@ export default function ContactsPage() {
                 clipRule="evenodd"
               />
             </svg>
-            Add Contact
+            <span className="hidden md:block">Add Contact</span>
           </Link>
         </div>
 
