@@ -272,6 +272,13 @@ export default function ContactDetailPage({ params }) {
           return;
         }
 
+        // socketService.emit("contactUpdated", {
+        //   contact_id: id,
+        //   user_id: user.user_id,
+        //   action: "update",
+        //   changes: changes
+        // });
+
         await api.put(`/contacts/${user.user_id}/${id}`, data);
 
         const currentTime = Date.now() / 1000;

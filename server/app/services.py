@@ -82,7 +82,6 @@ def add_user(data):
             'phone': data.get('phone'),
             'created_date': str(int(time.time()))
         }
-
         table.put_item(Item=user_data)
         print("user added")
         return jsonify(user_data), 201
@@ -163,6 +162,10 @@ def create_contact(user_id, data):
                 }
             }
         }
+
+        # # use tread lock to prevent race condition
+        # with table.meta.client.meta.config.table_write_capacity_units.use_thread_lock():
+            # table.put_item(Item=contact)
 
         table.put_item(Item=contact)
         print("contact created")

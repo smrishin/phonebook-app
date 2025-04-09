@@ -20,6 +20,11 @@ class SocketService {
     });
   }
 
+  // // emited an event to the server
+  // emit(event, data) {
+  //   this.socket.emit(event, data);
+  // }
+
   disconnect() {
     if (this.socket) {
       this.socket.disconnect();
