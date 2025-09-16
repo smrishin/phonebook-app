@@ -53,9 +53,9 @@ cd phonebook-app
 
 ```bash
 cd server
-python -m venv venv
+python -m venv venv # skip if venv is already setup
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements.txt # skip if already installed
 pip freeze > requirements.txt # if needed
 
 ```
@@ -150,7 +150,12 @@ cd web
 npm run dev
 ```
 
-#### 3. Open your browser and navigate to `http://localhost:3000`
+#### 3. Start dynamodb local:
+
+- start dynamodb local using nosql workbench or localstack.
+- dynamodb local endpoint url is `http://localhost:8000`
+
+#### 4. Open your browser and navigate to `http://localhost:3000`
 
 ## Sharing Your Local Development Environment
 
